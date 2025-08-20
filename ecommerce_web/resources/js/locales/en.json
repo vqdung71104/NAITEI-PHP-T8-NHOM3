@@ -132,6 +132,7 @@
     "Multiple Choices": "Multiple Choices",
     "Name": "Name",
     "name": "name",
+    "Admin Dashboard": "Admin Dashboard",
     "Network Authentication Required": "Network Authentication Required",
     "Network Connect Timeout Error": "Network Connect Timeout Error",
     "Network Read Timeout Error": "Network Read Timeout Error",
@@ -139,6 +140,7 @@
     "New :name": "New :name",
     "New Password": "New Password",
     "No": "No",
+    "Welcome, Admin" : "Welcome, Admin",
     "No Content": "No Content",
     "Non-Authoritative Information": "Non-Authoritative Information",
     "Not Acceptable": "Not Acceptable",
@@ -261,5 +263,75 @@
     "Yes": "Yes",
     "You are receiving this email because we received a password reset request for your account.": "You are receiving this email because we received a password reset request for your account.",
     "You're logged in!": "You're logged in!",
-    "Your email address is unverified.": "Your email address is unverified."
+    "Your email address is unverified.": "Your email address is unverified.",
+  "admin": {
+    "title": "Admin Dashboard",
+    "tabs": {
+      "dashboard": "Dashboard",
+      "categories": "Categories",
+      "products": "Products",
+      "orders": "Orders"
+    },
+    "dashboard": {
+      "salesOverview": "Sales Overview",
+      "productPerformance": "Product Performance",
+      "salesChartPlaceholder": "Sales Chart - Will be implemented later",
+      "productChartPlaceholder": "Product Chart - Will be implemented later"
+    },
+    "categories": {
+      "title": "Manage Categories",
+      "namePlaceholder": "Category name",
+      "descriptionPlaceholder": "Description (optional)",
+      "addButton": "Add Category",
+      "updateButton": "Update Category"
+    },
+    "products": {
+      "title": "Manage Products",
+      "namePlaceholder": "Product name",
+      "pricePlaceholder": "Price",
+      "descriptionPlaceholder": "Description",
+      "stockPlaceholder": "Stock quantity",
+      "imagePlaceholder": "Image URL (optional)",
+      "selectCategory": "Select category",
+      "addButton": "Add Product",
+      "updateButton": "Update Product",
+      "price": "Price",
+      "stock": "Stock",
+      "category": "Category",
+      "image": "Image",
+      "noImage": "No image"
+    },
+    "orders": {
+      "title": "Manage Orders",
+      "orderId": "Order ID",
+      "customer": "Customer",
+      "date": "Date",
+      "total": "Total",
+      "status": "Status",
+      "view": "View",
+      "guest": "Guest",
+      "status": {
+        "pending": "Pending",
+        "processing": "Processing",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "return": "Return"
+      }
+    },
+    "common": {
+      "id": "ID",
+      "name": "Name",
+      "description": "Description",
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "previous": "Previous",
+      "next": "Next",
+      "pageInfo": "Page {{current}} of {{total}}"
+    },
+    "confirmDeleteCategory": "Are you sure you want to delete this category?",
+    "confirmDeleteProduct": "Are you sure you want to delete this product?"
+  }
+
 }

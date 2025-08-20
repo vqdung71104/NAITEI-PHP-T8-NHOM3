@@ -259,7 +259,79 @@
     "Web Server is Down": "Máy Chủ Web Đã Tắt",
     "Whoops!": "Rất tiếc!",
     "Yes": "Đồng ý",
+    "Welcome, Admin":"Xin chào, Admin",
+    "Admin Dashboard":"Trang chủ Admin",
     "You are receiving this email because we received a password reset request for your account.": "Bạn nhận được email này vì chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.",
     "You're logged in!": "Bạn đã đăng nhập!",
-    "Your email address is unverified.": "Địa chỉ email của bạn chưa được xác minh."
+    "Your email address is unverified.": "Địa chỉ email của bạn chưa được xác minh.",
+  "admin": {
+    "title": "Bảng Điều Khiển Admin",
+    "tabs": {
+      "dashboard": "Tổng Quan",
+      "categories": "Danh Mục",
+      "products": "Sản Phẩm",
+      "orders": "Đơn Hàng"
+    },
+    "dashboard": {
+      "salesOverview": "Tổng Quan Doanh Thu",
+      "productPerformance": "Hiệu Suất Sản Phẩm",
+      "salesChartPlaceholder": "Biểu Đồ Doanh Thu - Sẽ được triển khai sau",
+      "productChartPlaceholder": "Biểu Đồ Sản Phẩm - Sẽ được triển khai sau"
+    },
+    "categories": {
+      "title": "Quản Lý Danh Mục",
+      "namePlaceholder": "Tên danh mục",
+      "descriptionPlaceholder": "Mô tả (tùy chọn)",
+      "addButton": "Thêm Danh Mục",
+      "updateButton": "Cập Nhật Danh Mục"
+    },
+    "products": {
+      "title": "Quản Lý Sản Phẩm",
+      "namePlaceholder": "Tên sản phẩm",
+      "pricePlaceholder": "Giá",
+      "descriptionPlaceholder": "Mô tả",
+      "stockPlaceholder": "Số lượng tồn kho",
+      "imagePlaceholder": "URL hình ảnh (tùy chọn)",
+      "selectCategory": "Chọn danh mục",
+      "addButton": "Thêm Sản Phẩm",
+      "updateButton": "Cập Nhật Sản Phẩm",
+      "price": "Giá",
+      "stock": "Tồn Kho",
+      "category": "Danh Mục",
+      "image": "Hình Ảnh",
+      "noImage": "Không có hình ảnh"
+    },
+    "orders": {
+      "title": "Quản Lý Đơn Hàng",
+      "orderId": "Mã Đơn Hàng",
+      "customer": "Khách Hàng",
+      "date": "Ngày",
+      "total": "Tổng Tiền",
+      "status": "Trạng Thái",
+      "view": "Xem",
+      "guest": "Khách",
+      "status": {
+        "pending": "Đang Chờ",
+        "processing": "Đang Xử Lý",
+        "completed": "Hoàn Thành",
+        "cancelled": "Đã Hủy",
+        "return": "Trả Hàng"
+      }
+    },
+    "common": {
+      "id": "ID",
+      "name": "Tên",
+      "description": "Mô Tả",
+      "actions": "Thao Tác",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "cancel": "Hủy",
+      "previous": "Trước",
+      "next": "Tiếp",
+      "pageInfo": "Trang {{current}} của {{total}}"
+    },
+    "confirmDeleteCategory": "Bạn có chắc chắn muốn xóa danh mục này không?",
+    "confirmDeleteProduct": "Bạn có chắc chắn muốn xóa sản phẩm này không?"
+  }
+
 }
