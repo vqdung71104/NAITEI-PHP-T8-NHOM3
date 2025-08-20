@@ -14,110 +14,129 @@
         <div class="checkout-grid">
             <div class="form-section">
                 <div class="section-title">Thông tin giao hàng</div>
-                
-                <form id="checkoutForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">Họ</label>
-                            <input type="text" id="firstName" name="firstName" required placeholder="Nhập họ">
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Tên</label>
-                            <input type="text" id="lastName" name="lastName" required placeholder="Nhập tên">
-                        </div>
-                    </div>
+                <form id="checkoutForm" action="{{ route('checkout.process') }}" method="POST">
+    @csrf
 
-                    <div class="form-group">
-                        <label for="email">Địa chỉ email</label>
-                        <input type="email" id="email" name="email" required placeholder="your.email@domain.com">
-                    </div>
+    {{-- Tên người nhận --}}
+    <div class="form-row">
+        <div class="form-group">
+            <label for="firstName">Họ</label>
+            <input type="text" id="firstName" name="firstName" required placeholder="Nhập họ của người nhận">
+        </div>
+        <div class="form-group">
+            <label for="lastName">Tên</label>
+            <input type="text" id="lastName" name="lastName" required placeholder="Nhập tên của người nhận">
+        </div>
+    </div>
 
-                    <div class="form-group">
-                        <label for="phone">Số điện thoại</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="+84 123 456 789">
-                    </div>
+    {{-- Email --}}
+    <div class="form-group">
+        <label for="email">Địa chỉ email</label>
+        <input type="email" id="email" name="email" required placeholder="your.email@domain.com">
+    </div>
 
-                    <div class="form-group">
-                        <label for="address">Địa chỉ giao hàng</label>
-                        <input type="text" id="address" name="address" required placeholder="Số nhà, tên đường, phường/xã">
-                    </div>
+    {{-- Số điện thoại --}}
+    <div class="form-group">
+        <label for="phone">Số điện thoại</label>
+        <input type="tel" id="phone" name="phone_number" required placeholder="+84 123 456 789">
+    </div>
 
-                    <div class="form-group">
-                        <label for="notes">Ghi chú đặc biệt</label>
-                        <textarea id="notes" name="notes" placeholder="Yêu cầu đặc biệt về thời gian giao hàng, đóng gói..."></textarea>
-                    </div>
+    {{-- Địa chỉ chi tiết --}}
+    <div class="form-group">
+        <label for="address">Địa chỉ giao hàng</label>
+        <input type="text" id="address" name="details" required placeholder="Số nhà, tên đường, phường/xã">
+    </div>
 
-                    <div class="payment-section">
-                        <div class="section-title">Phương thức thanh toán</div>
-                        
-                        <div class="payment-method">
-                            <div class="payment-header">
-                                <div class="payment-icon">COD</div>
-                                <div class="payment-details">
-                                    <h3>Thanh toán khi nhận hàng</h3>
-                                    <p>Thanh toán bằng tiền mặt khi giao hàng</p>
-                                </div>
-                            </div>
-                            <div class="payment-benefits">
-                                <div>Kiểm tra kỹ sản phẩm trước khi thanh toán</div>
-                                <div>Hoàn toàn miễn phí, không phát sinh thêm chi phí</div>
-                                <div>Đảm bảo an toàn tuyệt đối cho khách hàng</div>
-                                <div>Hỗ trợ đổi trả trong vòng 7 ngày</div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+    {{-- Thông tin địa phương (ward, district, city, postal_code, country) --}}
+    <div class="form-row">
+        <div class="form-group">
+            <input type="text" name="ward" placeholder="Phường/Xã" required>
+        </div>
+        <div class="form-group">
+            <input type="text" name="district" placeholder="Quận/Huyện" required>
+        </div>
+        <div class="form-group">
+            <input type="text" name="city" placeholder="Tỉnh/Thành phố" required>
+        </div>
+        <div class="form-group">
+            <input type="text" name="postal_code" placeholder="Mã bưu chính" required>
+        </div>
+        <div class="form-group">
+            <input type="text" name="country" placeholder="Quốc gia" required value="Vietnam">
+        </div>
+    </div>
+
+    {{-- Ghi chú --}}
+    <div class="form-group">
+        <label for="notes">Ghi chú đặc biệt</label>
+        <textarea id="notes" name="notes" placeholder="Yêu cầu đặc biệt về thời gian giao hàng, đóng gói..."></textarea>
+    </div>
+
+    {{-- is_default --}}
+    <input type="hidden" name="is_default" value="1">
+
+    {{-- Phương thức thanh toán --}}
+    <div class="payment-section">
+        <div class="section-title">Phương thức thanh toán</div>
+        <div class="payment-method">
+            <div class="payment-header">
+                <div class="payment-icon">COD</div>
+                <div class="payment-details">
+                    <h3>Thanh toán khi nhận hàng</h3>
+                    <p>Thanh toán bằng tiền mặt khi giao hàng</p>
+                </div>
+            </div>
+            <div class="payment-benefits">
+                <div>Kiểm tra kỹ sản phẩm trước khi thanh toán</div>
+                <div>Hoàn toàn miễn phí, không phát sinh thêm chi phí</div>
+                <div>Đảm bảo an toàn tuyệt đối cho khách hàng</div>
+                <div>Hỗ trợ đổi trả trong vòng 7 ngày</div>
+            </div>
+        </div>
+    </div>
+</form>
+
             </div>
 
             <div class="order-summary">
                 <div class="section-title">Tóm tắt đơn hàng</div>
 
-                <div class="product-item">
-                    <div class="product-image">◆</div>
-                    <div class="product-info">
-                        <div class="product-name">Áo sơ mi lụa premium</div>
-                        <div class="product-variant">Trắng · Size M</div>
-                        <div class="product-quantity">Số lượng: 1</div>
-                    </div>
-                    <div class="product-price">2.890.000₫</div>
-                </div>
+                @php
+                    $subtotal = 0;
+                    $shipping = 30000;
+                @endphp
 
-                <div class="product-item">
-                    <div class="product-image">◆</div>
-                    <div class="product-info">
-                        <div class="product-name">Quần âu wools</div>
-                        <div class="product-variant">Đen · Size 32</div>
-                        <div class="product-quantity">Số lượng: 1</div>
+                @foreach($cartItems as $item)
+                    @php $subtotal += $item->product->price * $item->quantity; @endphp
+                    <div class="product-item">
+                        <div class="product-image">
+                            <img src="{{ $item->product->image_url ?? 'https://via.placeholder.com/80x100' }}" alt="{{ $item->product->name }}" style="width:100%; height:100%; object-fit:cover;">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">{{ $item->product->name }}</div>
+                            <div class="product-variant">Số lượng: {{ $item->quantity }}</div>
+                            {{-- Nếu có variant khác thì hiển thị --}}
+                        </div>
+                        <div class="product-price">{{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}₫</div>
                     </div>
-                    <div class="product-price">3.490.000₫</div>
-                </div>
-
-                <div class="product-item">
-                    <div class="product-image">◆</div>
-                    <div class="product-info">
-                        <div class="product-name">Cà vạt silk</div>
-                        <div class="product-variant">Navy · Classic</div>
-                        <div class="product-quantity">Số lượng: 1</div>
-                    </div>
-                    <div class="product-price">790.000₫</div>
-                </div>
+                @endforeach
 
                 <div class="summary-divider"></div>
 
                 <div class="summary-row">
                     <span>Tạm tính</span>
-                    <span>7.170.000₫</span>
+                    <span>{{ number_format($subtotal, 0, ',', '.') }}₫</span>
                 </div>
                 <div class="summary-row">
                     <span>Phí vận chuyển</span>
-                    <span>30.000₫</span>
+                    <span>{{ number_format($shipping, 0, ',', '.') }}₫</span>
                 </div>
                 <div class="summary-row total">
                     <span>Tổng thanh toán</span>
-                    <span>7.200.000₫</span>
+                    <span>{{ number_format($subtotal + $shipping, 0, ',', '.') }}₫</span>
                 </div>
 
-                <button type="submit" class="submit-btn" onclick="handleSubmit()">
+                <button type="submit" class="submit-btn" onclick="document.getElementById('checkoutForm').submit();">
                     Hoàn tất đơn hàng
                 </button>
 

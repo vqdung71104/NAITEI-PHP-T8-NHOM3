@@ -20,7 +20,7 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', 'Merriweather', sans-serif;
     line-height: 1.6;
     color: var(--primary);
     background: var(--white);

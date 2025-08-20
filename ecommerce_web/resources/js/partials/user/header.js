@@ -1,4 +1,4 @@
-let isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+let isLoggedIn = document.querySelector('meta[name="user-logged-in"]').content === '1';
 
 function init() {
     updateAuthUI();

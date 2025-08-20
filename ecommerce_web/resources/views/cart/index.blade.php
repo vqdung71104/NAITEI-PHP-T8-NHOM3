@@ -68,7 +68,7 @@
                     <span id="total">{{ number_format(($subtotal ?? 0) + ($shipping ?? 30000), 0, ',', '.') }}đ</span>
                 </div>
 
-                <form action="#" method="GET">
+                <form action="{{ route('checkout') }}" method="GET">
                     <button type="submit" class="checkout-btn">Thanh toán</button>
                 </form>
 
@@ -82,7 +82,7 @@
         <div class="empty-cart">
             <h2>Giỏ hàng của bạn đang trống</h2>
             <p>Hãy khám phá những cuốn sách tuyệt vời của chúng tôi</p>
-            <a href="#">Bắt đầu mua sắm →</a>
+            <a href="{{ route('home') }}">Bắt đầu mua sắm →</a>
         </div>
     @endif
 </div>

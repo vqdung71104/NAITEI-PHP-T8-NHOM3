@@ -1,4 +1,3 @@
-
 function getStatusClass(status) {
     const statusMap = {
         'pending': 'status-pending',
@@ -35,12 +34,16 @@ function formatDate(dateStr) {
 }
 
 
+// Lấy dữ liệu orders từ server
+const ordersData = window.ordersData || [];
+let filteredOrders = ordersData;
+
 function filterOrders() {
     const statusFilter = document.getElementById('statusFilter').value;
     const dateFrom = document.getElementById('dateFrom').value;
     const dateTo = document.getElementById('dateTo').value;
 
-    filteredOrders = sampleOrders.filter(order => {
+    filteredOrders = ordersData.filter(order => {
         const matchStatus = !statusFilter || order.status === statusFilter;
         const matchDateFrom = !dateFrom || new Date(order.created_at) >= new Date(dateFrom);
         const matchDateTo = !dateTo || new Date(order.created_at) <= new Date(dateTo);
@@ -76,7 +79,31 @@ document.getElementById('statusFilter').addEventListener('change', filterOrders)
 document.getElementById('dateFrom').addEventListener('change', filterOrders);
 document.getElementById('dateTo').addEventListener('change', filterOrders);
 
+function renderOrders(orders) {
+    const container = document.getElementById('ordersContainer');
+    const emptyState = document.getElementById('emptyState');
+    
+    if (orders.length === 0) {
+        // Ẩn tất cả order cards
+        const orderCards = container.querySelectorAll('.order-card');
+        orderCards.forEach(card => card.style.display = 'none');
+        emptyState.style.display = 'block';
+    } else {
+        emptyState.style.display = 'none';
+        // Hiển thị/ẩn order cards dựa trên filter
+        const allOrderCards = container.querySelectorAll('.order-card');
+        allOrderCards.forEach((card, index) => {
+            if (index < orders.length) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+}
+
 // Khởi tạo trang
 document.addEventListener('DOMContentLoaded', () => {
-    renderOrders(sampleOrders);
+    filteredOrders = ordersData;
+    renderOrders(filteredOrders);
 });
