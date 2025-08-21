@@ -1,7 +1,28 @@
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import { Link } from '@inertiajs/react'; // Import Link từ Inertia
+import { Head, usePage } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 
 export default function AdminLayout({ children, breadcrumbs, ...props }) {
+  const { t, i18n } = useTranslation();
+  const { props:pageProps } = usePage();
+  const { locale, _token } = pageProps;
+  
+  async function changeLang(lang) {
+    // 1) Đổi ngay trên frontend
+    i18n.changeLanguage(lang);
+    // 2) Gọi API để lưu vào session backend
+    await fetch('/lang', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': _token ?? '',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ lang }),
+      credentials: 'same-origin',
+    });
+  }
   return (
     <AppLayoutTemplate 
       breadcrumbs={breadcrumbs} 
@@ -37,18 +58,18 @@ export default function AdminLayout({ children, breadcrumbs, ...props }) {
                   </svg>
                 </button>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Admin Dashboard
+                  {t("Admin Dashboard")}
                 </h1>
               </div>
               <div className="flex items-center space-x-4">
                 <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Welcome, Admin
+                  {t("Welcome, Admin")}
                 </span>
                 <a
                   href={route('home')}
                   className="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
                 >
-                  View Site
+                  {t("View Site")}
                 </a>
                 {/* Thêm nút logout ở đây */}
                 <Link
@@ -57,8 +78,23 @@ export default function AdminLayout({ children, breadcrumbs, ...props }) {
                   as="button"
                   className="text-sm text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300"
                 >
-                  Logout
+                  {t("Logout")}
                 </Link>
+
+                <div className="flex gap-2">
+                <button
+                  className="px-3 py-2 rounded bg-blue-600 text-white"
+                  onClick={() => changeLang('vi')}
+                >
+                  {t('change_to_vi')}
+                </button>
+                <button
+                  className="px-3 py-2 rounded bg-gray-600 text-white"
+                  onClick={() => changeLang('en')}
+                >
+                  {t('change_to_en')}
+                </button>
+                </div>
               </div>
             </div>
           </div>
