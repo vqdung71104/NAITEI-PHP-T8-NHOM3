@@ -261,5 +261,13 @@
     "Yes": "Yes",
     "You are receiving this email because we received a password reset request for your account.": "You are receiving this email because we received a password reset request for your account.",
     "You're logged in!": "You're logged in!",
-    "Your email address is unverified.": "Your email address is unverified."
+    "Your email address is unverified.": "Your email address is unverified.",
+    "Trang chủ":"Home",
+    "Sản phẩm":"Products",
+    "Giỏ hàng": "Cart",
+    "Theo dõi đơn hàng": "Order details",
+    "Xem Profile": "View Profile",
+    "Khám phá":"Explore",
+    "Xem chi tiết":"Details",
+    "Xem thêm": "See more"
 }

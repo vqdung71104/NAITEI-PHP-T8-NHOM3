@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
@@ -124,65 +125,21 @@ class OrderController extends Controller
     /**
      * Update the specified order
      */
-    public function update(OrderRequest $request, Order $order): JsonResponse
+    public function update(Request $request, Order $order)
     {
-        $this->authorize('update', $order);
-        
-        $user = auth()->user();
-        
-        try {
-            DB::beginTransaction();
-            
-            $validated = $request->validated();
-            
-            $updateData = [
-                'address_id' => $validated['address_id']
-            ];
-            
-            if ($user->isAdmin() && isset($validated['status'])) {
-                $updateData['status'] = $validated['status'];
-            }
-            
-            $order->update($updateData);
-            
-            if (isset($validated['order_items'])) {
-                $order->orderItems()->delete();
-                
-                $totalPrice = 0;
-                
-                foreach ($validated['order_items'] as $item) {
-                    $product = Product::findOrFail($item['product_id']);
-                    
-                    OrderItem::create([
-                        'order_id' => $order->id,
-                        'product_id' => $item['product_id'],
-                        'quantity' => $item['quantity'],
-                    ]);
-                    
-                    $totalPrice += $product->price * $item['quantity'];
-                }
-                
-                $order->update(['total_price' => $totalPrice]);
-            }
-            
-            DB::commit();
-            
-            $order->load(['user', 'address', 'orderItems.product']);
-            
-            return response()->json([
-                'success' => true,
-                'data' => $order,
-                'message' => 'Đơn hàng được cập nhật thành công.'
-            ]);
-            
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi cập nhật đơn hàng: ' . $e->getMessage()
-            ], 500);
-        }
+        $request->validate([
+            'status' => 'required|string|in:pending,processing,completed,cancelled,return', 
+        ]);
+    
+        $order->update([
+            'status' => $request->status,
+        ]);
+    
+        return Inertia::render('AdminDashboard', [
+            'success' => true,
+            'message' => 'Order status updated successfully',
+            'order'   => $order,
+        ]);
     }
 
     /**
@@ -314,7 +271,14 @@ class OrderController extends Controller
     // Backward compatibility method
     public function trackOrders()
     {
-        $orders = session('orders', []);
+        $user = auth()->user();
+        
+        // Lấy đơn hàng của user hiện tại từ database
+        $orders = Order::with(['address', 'orderItems.product'])
+                      ->forUser($user->id)
+                      ->orderBy('created_at', 'desc')
+                      ->get();
+        
         return view('orders.track', compact('orders'));
     }
 }

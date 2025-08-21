@@ -55,7 +55,7 @@
             <div class="form">
                 <div id="success" class="success">
                     Cảm ơn bạn đã đánh giá sản phẩm.
-                </div>
+                    </div>
 
                 <form onsubmit="submitReview(event)">
                     <div class="form-row">
@@ -63,31 +63,31 @@
                             <label>Họ tên</label>
                             <input type="text" id="name" required>
                         </div>
-                        <div class="form-group">
+                    <div class="form-group">
                             <label>Email</label>
                             <input type="email">
                         </div>
                         <div class="form-group full">
-                            <label>Nhận xét</label>
+                        <label>Nhận xét</label>
                             <textarea id="content" required></textarea>
                         </div>
                     </div>
                     <button type="submit" class="submit">Gửi đánh giá</button>
-        </form>
+                </form>
             </div>
 
             <div class="review-list" id="reviews">
                 <!-- Reviews tĩnh giữ nguyên -->
-                <div class="review">
-                    <div class="review-header">
+                    <div class="review">
+                        <div class="review-header">
                         <span class="review-name">Minh Hoàng</span>
                         <span class="review-date">2 ngày trước</span>
-                    </div>
-                    <div class="review-content">
+                        </div>
+                        <div class="review-content">
                         Sách viết rất dễ hiểu, ví dụ thực tế và cập nhật. 
                         Phần về Laravel đặc biệt hữu ích cho công việc hiện tại của tôi.
                     </div>
-                </div>
+                        </div>
 
                 <div class="review">
                     <div class="review-header">

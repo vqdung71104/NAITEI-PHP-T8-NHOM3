@@ -9,6 +9,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\Controller;
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'viewall'])->name('products.viewall');
@@ -78,6 +80,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::post('/lang',  [LanguageController::class, 'changeLanguage'])->name('lang.set');
+Route::get('/language/{language}', [LanguageController::class, 'changeLanguageBlade'])->name('language.change'); 
+
+Route::post('/products/{id}/reviews', [ReviewController::class, 'store'])
+    ->name('reviews.store')
+    ->middleware('auth');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

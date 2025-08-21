@@ -19,4 +19,10 @@ class LanguageController extends Controller
 
         return response()->noContent();
     }
+
+    public function changeLanguageBlade(Request $request, $language ) {
+        Session::put('lang',$language);
+
+        return redirect()->back();
+    }
 }
