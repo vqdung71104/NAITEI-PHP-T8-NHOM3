@@ -65,7 +65,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                             href={route('profile.edit')}
                                         >
                                             Profile
-                                        </Dropdown.Link>                            
+                                        </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route('logout')}
                                             method="post"
