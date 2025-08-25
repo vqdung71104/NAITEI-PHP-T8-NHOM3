@@ -98,4 +98,10 @@
         </div>
     </div>
 </body>
+@if(session('success'))
+    <script>
+        alert({!! json_encode(session('success')) !!});
+    </script>
+@endif
+
 @endsection
