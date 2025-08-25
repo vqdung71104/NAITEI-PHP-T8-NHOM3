@@ -135,11 +135,7 @@ class OrderController extends Controller
             'status' => $request->status,
         ]);
     
-        return Inertia::render('AdminDashboard', [
-            'success' => true,
-            'message' => 'Order status updated successfully',
-            'order'   => $order,
-        ]);
+        return redirect()->back()->with('success', 'Order updated successfully.');
     }
 
     /**
