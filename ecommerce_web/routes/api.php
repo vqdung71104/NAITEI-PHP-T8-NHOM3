@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
@@ -45,4 +46,15 @@ Route::middleware(['auth'])->prefix('orders')->group(function () {
         Route::get('/statistics/overview', [OrderController::class, 'statistics'])->name('api.orders.statistics');
         Route::post('/{order}/status', [OrderController::class, 'updateStatus'])->name('api.orders.update-status');
     });
+});
+
+// User Management API routes - Admin only
+Route::middleware(['auth', 'admin'])->prefix('users')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('api.users.index');
+    Route::post('/', [UserController::class, 'store'])->name('api.users.store');
+    Route::get('/statistics', [UserController::class, 'statistics'])->name('api.users.statistics');
+    Route::get('/{user}', [UserController::class, 'show'])->name('api.users.show');
+    Route::put('/{user}', [UserController::class, 'update'])->name('api.users.update');
+    Route::delete('/{user}', [UserController::class, 'destroy'])->name('api.users.destroy');
+    Route::post('/{user}/status', [UserController::class, 'updateStatus'])->name('api.users.update-status');
 });
