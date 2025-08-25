@@ -9,10 +9,17 @@ use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {
+    protected $categoryRepository;
+
+    public function __construct(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
     public function index(): JsonResponse
     {
         try {
-            $categories = Category::all();
+            $categories = $this->categoryRepository->all();
             return response()->json([
                 'success' => true,
                 'data' => $categories,
@@ -36,7 +43,7 @@ class CategoryController extends Controller
                 'description' => 'nullable|string'
             ]);
 
-            $category = Category::create($validated);
+            $category = $this->categoryRepository->store($validated);
 
             return response()->json([
                 'success' => true,
@@ -63,7 +70,7 @@ class CategoryController extends Controller
     public function show(string $id): JsonResponse
     {
         try {
-            $category = Category::find($id);
+            $category = $this->categoryRepository->find($id);
 
             if (!$category) {
                 return response()->json([
@@ -91,7 +98,7 @@ class CategoryController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         try {
-            $category = Category::find($id);
+            $category = $this->categoryRepository->find($id);
 
             if (!$category) {
                 return response()->json([
@@ -131,7 +138,7 @@ class CategoryController extends Controller
     public function destroy(string $id): JsonResponse
     {
         try {
-            $category = Category::find($id);
+            $category = $this->categoryRepository->find($id);
 
             if (!$category) {
                 return response()->json([
