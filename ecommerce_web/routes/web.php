@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Controller;
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -65,6 +66,15 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
         Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');
         Route::post('/{order}/status', [OrderController::class, 'updateStatus'])->name('update-status');
 
+    });
+    
+    // User management routes for admin
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [AdminController::class, 'users'])->name('index');
+        Route::post('/', [AdminController::class, 'storeUser'])->name('store');
+        Route::get('/{user}', [AdminController::class, 'showUser'])->name('show');
+        Route::put('/{user}', [AdminController::class, 'updateUser'])->name('update');
+        Route::delete('/{user}', [AdminController::class, 'destroyUser'])->name('destroy');
     });
 });
 
