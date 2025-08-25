@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Inertia\Inertia;
 
 class AdminController extends Controller
 {
@@ -288,6 +289,51 @@ class AdminController extends Controller
     {
         $order->delete();
         return redirect()->back()->with('success', 'Order deleted successfully.');
+    }
+
+    public function users()
+    {
+        $users = User::all();
+        return redirect()->back()->with('users', $users);
+    }
+
+    public function storeUser(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required|integer|exists:users,id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'status' => 'required|string|max:255'
+        ]);
+
+        $user = User::create($validated);
+
+        return redirect()->back()->with('success', 'User created successfully.');
+    }
+
+    public function updateUser(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8|confirmed',
+            'status' => 'required|string|max:255'
+        ]);
+
+        if (empty($validated['password'])) {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        return redirect()->back()->with('success', 'User updated successfully.');
+    }
+
+    public function destroyUser(User $user)
+    {
+        $user->delete();
+        return redirect()->back()->with('success', 'User deleted successfully.');
     }
 
 }
