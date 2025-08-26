@@ -16,7 +16,8 @@ use App\Http\Controllers\Controller;
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'viewall'])->name('products.viewall');
 Route::get('/products/{id}', [ProductController::class, 'detail'])->name('products.detail');
-Route::post('/products/{id}/review', [ProductController::class, 'addReview'])->name('products.review');
+
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
@@ -92,9 +93,6 @@ Route::get('/dashboard', function () {
 Route::post('/lang',  [LanguageController::class, 'changeLanguage'])->name('lang.set');
 Route::get('/language/{language}', [LanguageController::class, 'changeLanguageBlade'])->name('language.change'); 
 
-Route::post('/products/{id}/reviews', [ReviewController::class, 'store'])
-    ->name('reviews.store')
-    ->middleware('auth');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

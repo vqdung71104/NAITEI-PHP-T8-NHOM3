@@ -8,7 +8,7 @@
 
 <body>
     <div class="container">
-        <a href="javascript:history.back()" class="back">← Quay lại</a>
+        <a href="{{ route('products.viewall') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }} back">← Quay lại</a>
 
         <div class="product">
             <div class="image">
@@ -52,52 +52,62 @@
         <div class="reviews">
             <h2 class="section-title">Đánh giá</h2>
 
-            <div class="form">
-                <div id="success" class="success">
-                    Cảm ơn bạn đã đánh giá sản phẩm.
-                    </div>
+            {{-- Thông báo --}}
+            @if (session('success'))
+                <div id="success" class="success">{{ session('success') }}</div>
+            @endif
 
-                <form onsubmit="submitReview(event)">
+            {{-- Form thêm review --}}
+            @auth
+                <form action="{{ route('reviews.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+
                     <div class="form-row">
                         <div class="form-group">
                             <label>Họ tên</label>
-                            <input type="text" id="name" required>
+                            <input type="text" value="{{ Auth::user()->name }}" readonly>
                         </div>
-                    <div class="form-group">
+                        <div class="form-group">
                             <label>Email</label>
-                            <input type="email">
+                            <input type="email" value="{{ Auth::user()->email }}" readonly>
                         </div>
                         <div class="form-group full">
-                        <label>Nhận xét</label>
-                            <textarea id="content" required></textarea>
+                            <label>Nhận xét</label>
+                            <textarea name="content" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Số sao</label>
+                            <select name="rating" required>
+                                <option value="">-- Chọn --</option>
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <option value="{{ $i }}">{{ $i }} ⭐</option>
+                                @endfor
+                            </select>
                         </div>
                     </div>
                     <button type="submit" class="submit">Gửi đánh giá</button>
                 </form>
-            </div>
+            @else
+                <p><a href="{{ route('login') }}">Đăng nhập</a> để viết đánh giá.</p>
+            @endauth
 
+            {{-- Danh sách review --}}
             <div class="review-list" id="reviews">
-                <!-- Reviews tĩnh giữ nguyên -->
+                @forelse ($product->reviews()->with('user')->latest()->get() as $review)
                     <div class="review">
                         <div class="review-header">
-                        <span class="review-name">Minh Hoàng</span>
-                        <span class="review-date">2 ngày trước</span>
+                            <span class="review-name">{{ $review->user->name ?? 'Người dùng' }}</span>
+                            <span class="review-date">{{ $review->created_at->diffForHumans() }}</span>
                         </div>
                         <div class="review-content">
-                        Sách viết rất dễ hiểu, ví dụ thực tế và cập nhật. 
-                        Phần về Laravel đặc biệt hữu ích cho công việc hiện tại của tôi.
-                    </div>
+                            {{ $review->content }}
+                            <div>⭐ {{ $review->rating }}/5</div>
                         </div>
-
-                <div class="review">
-                    <div class="review-header">
-                        <span class="review-name">Thu Hằng</span>
-                        <span class="review-date">1 tuần trước</span>
                     </div>
-                    <div class="review-content">
-                        Chất lượng tốt, giá cả hợp lý. Tôi đã giới thiệu cho nhiều đồng nghiệp.
-                    </div>
-                </div>
+                @empty
+                    <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                @endforelse
             </div>
         </div>
     </div>
