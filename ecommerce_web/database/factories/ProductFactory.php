@@ -9,7 +9,54 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
  */
 class ProductFactory extends Factory
-{
+{   
+    /**
+     * Tạo ảnh fake local cho testing
+     */
+    protected function createFakeImage()
+    {
+        $width = 400;
+        $height = 300;
+        $image = imagecreate($width, $height);
+        
+        // Màu nền ngẫu nhiên
+        $bgColor = imagecolorallocate($image, rand(50, 255), rand(50, 255), rand(50, 255));
+        $textColor = imagecolorallocate($image, 255, 255, 255);
+        $borderColor = imagecolorallocate($image, 0, 0, 0);
+        
+        // Vẽ border
+        imagerectangle($image, 0, 0, $width-1, $height-1, $borderColor);
+        
+        // Text chính
+        $productText = 'PRODUCT';
+        $numberText = rand(1000, 9999);
+        
+        // Vẽ text (cần font built-in)
+        imagestring($image, 5, 160, 120, $productText, $textColor);
+        imagestring($image, 5, 170, 160, $numberText, $textColor);
+        
+        // Tạo một số hình trang trí đơn giản
+        $decorColor = imagecolorallocate($image, 255, 255, 255);
+        for ($i = 0; $i < 5; $i++) {
+            imageellipse($image, rand(50, 350), rand(50, 250), 20, 20, $decorColor);
+        }
+        
+        // Tạo tên file unique
+        $filename = 'products/fake_' . uniqid() . '.png';
+        $fullPath = storage_path('app/public/' . $filename);
+        
+        // Tạo thư mục nếu chưa có
+        if (!is_dir(dirname($fullPath))) {
+            mkdir(dirname($fullPath), 0755, true);
+        }
+        
+        // Lưu file
+        imagepng($image, $fullPath);
+        imagedestroy($image);
+        
+        return $filename;
+    }
+
     /**
      * Define the model's default state.
      *
@@ -94,10 +141,12 @@ class ProductFactory extends Factory
             'price' => fake()->randomFloat(0, 50000, 500000),
             'category_id' => Category::factory(),
             'stock' => fake()->numberBetween(0, 100),
-            'image_url' => fake()->imageUrl(400, 600, 'books', true, 'book'),
+            'image_url' => $this->createFakeImage(),
             'author' => fake()->name(),
         ];
     }
+
+
 
     /**
      * Indicate that the product is out of stock.
