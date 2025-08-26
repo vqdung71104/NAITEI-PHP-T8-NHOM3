@@ -307,7 +307,8 @@
       "customer": "Khách Hàng",
       "date": "Ngày",
       "total": "Tổng Tiền",
-      "status": "Trạng Thái",
+      "status_": "Trạng Thái",
+      "access": "Xác nhận",
       "view": "Xem",
       "guest": "Khách",
       "status": {

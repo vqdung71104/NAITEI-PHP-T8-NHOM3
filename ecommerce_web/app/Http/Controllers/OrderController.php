@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderConfirmed;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -276,5 +277,61 @@ class OrderController extends Controller
                       ->get();
         
         return view('orders.track', compact('orders'));
+    }
+
+    /**
+     * Lấy đơn hàng với eager loading để tránh N+1 query
+     */
+    private function getOrderWithRelations($orderId)
+    {
+        return Order::with([
+            'user',                          // Thông tin khách hàng
+            'address',                       // Địa chỉ giao hàng
+            'orderItems',                    // Order items
+            'orderItems.product',            // Chi tiết sản phẩm trong đơn hàng
+            'confirmedBy',                   // Admin xác nhận'
+        ])->findOrFail($orderId);
+    }
+
+    public function confirmOrder(Request $request, $orderId)
+    {
+        $order = $this->getOrderWithRelations($orderId);
+        
+        // Kiểm tra đơn hàng đã được xác nhận chưa
+        // if ($order->isConfirmed()) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Đơn hàng này đã được xác nhận trước đó!'
+        //     ]);
+        // }
+
+        // Kiểm tra có email khách hàng không
+        if (!$order->user || !$order->user->email) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy email khách hàng!'
+            ]);
+        }
+
+        try {
+            // Kích hoạt event - Email sẽ được gửi tự động qua listener
+            event(new OrderConfirmed($order));
+
+            // Cập nhật trạng thái đơn hàng
+            $order->update([
+                'status' => 'processing',
+            ]);
+        
+            
+        
+            return ;
+        
+        } catch (\Exception $e) {
+            \Log::error('Error confirming order: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi xác nhận đơn hàng!'
+        ], 500);
+        }
     }
 }

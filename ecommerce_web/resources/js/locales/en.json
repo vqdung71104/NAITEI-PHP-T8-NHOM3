@@ -307,9 +307,11 @@
       "customer": "Customer",
       "date": "Date",
       "total": "Total",
-      "status": "Status",
+      "status_": "Status",
       "view": "View",
       "guest": "Guest",
+      "access": "Access",
+      "confirming": "confirming",
       "status": {
         "pending": "Pending",
         "processing": "Processing",

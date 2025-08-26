@@ -16,7 +16,9 @@ class Order extends Model
         'user_id',
         'address_id', 
         'total_price',
-        'status'
+        'status',
+        'confirmed_at',
+        'confirmed_by',
     ];
 
     /**
@@ -24,6 +26,7 @@ class Order extends Model
      */
     protected $casts = [
         'total_price' => 'decimal:2',
+        'confirmed_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -57,6 +60,14 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Relationship với User (admin xác nhận)
+     */
+    public function confirmedBy()
+    {
+        return $this->belongsTo(User::class, 'confirmed_by');
     }
 
     /**
@@ -125,5 +136,62 @@ class Order extends Model
     public function belongsToUser($userId)
     {
         return $this->user_id == $userId;
+    }
+
+    /**
+     * Accessor - Lấy tên khách hàng
+     */
+    public function getCustomerNameAttribute()
+    {
+        return $this->user->name ?? 'N/A';
+    }
+
+    /**
+     * Accessor - Lấy email khách hàng
+     */
+    public function getCustomerEmailAttribute()
+    {
+        return $this->user->email ?? null;
+    }
+
+    /**
+     * Accessor - Lấy số điện thoại khách hàng
+     */
+    public function getCustomerPhoneAttribute()
+    {
+        return $this->address->phone_number ?? null;
+    }
+
+    /**
+     * Accessor - Lấy địa chỉ giao hàng
+     */
+    public function getShippingAddressAttribute()
+    {
+        if ($this->address) {
+            return $this->address->full_address ?? 
+                   ($this->address->ward . ', ' .$this->address->district . ', ' . $this->address->city) ??
+                   $this->address->address;
+        }
+        return 'N/A';
+    }
+
+    /**
+     * Accessor - Tính tổng tiền đơn hàng từ order items
+     */
+    public function getCalculatedTotalAttribute()
+    {
+        return $this->orderItems->sum(function($item) {
+            return $item->quantity * $item->product->price;
+        });
+    }
+
+    /**
+     * Method - Cập nhật tổng tiền đơn hàng
+     */
+    public function updateTotalPrice()
+    {
+        $this->total_price = $this->calculated_total;
+        $this->save();
+        return $this;
     }
 }
