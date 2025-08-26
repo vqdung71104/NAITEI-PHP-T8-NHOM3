@@ -32,15 +32,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    if (Auth::check()) {
+        // If already logged in, redirect to homepage
+        return redirect()->route('home');
+    } else {
+        // If not logged in, redirect to login page
+        return redirect()->route('login');
+    }
 });
 
-// Routes cho Admin - Chỉ admin mới có thể truy cập
+// Routes for Admin - Only accessible by admin
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/', [AdminController::class, 'index'])->name('index');
