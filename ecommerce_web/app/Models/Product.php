@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -51,5 +52,60 @@ class Product extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Accessor: Lấy URL đầy đủ của ảnh (chỉ file local)
+     */
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            // Kiểm tra xem có file no_image.png trong public/images không
+            if (file_exists(public_path('images/no_image.png'))) {
+                return asset('images/no_image.png');
+            }
+            // Tạo no_image nếu chưa có
+            return $this->createNoImageIfNotExists();
+        }
+
+        // Kiểm tra file có tồn tại trong storage không
+        if (Storage::disk('public')->exists($this->image)) {
+            return Storage::disk('public')->url($this->image);
+        }
+
+        // Fallback nếu file không tồn tại
+        return $this->createNoImageIfNotExists();
+    }
+
+    /**
+     * Tạo ảnh no_image nếu chưa có
+     */
+    private function createNoImageIfNotExists()
+    {
+        $publicImagePath = public_path('images/no_image.png');
+        
+        // Tạo thư mục images nếu chưa có
+        if (!is_dir(dirname($publicImagePath))) {
+            mkdir(dirname($publicImagePath), 0755, true);
+        }
+        
+        // Nếu chưa có file, tạo mới
+        if (!file_exists($publicImagePath)) {
+            $this->createNoImageFile($publicImagePath);
+        }
+        
+        return asset('images/no_image.png');
+    }
+
+    /**
+     * Xóa ảnh khi xóa model
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($product) {
+            $product->deleteOldImage();
+        });
     }
 }
