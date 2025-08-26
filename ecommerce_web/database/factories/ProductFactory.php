@@ -11,10 +11,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class ProductFactory extends Factory
 {   
     /**
-     * Tạo ảnh fake local cho testing
      */
     protected function createFakeImage()
     {
+
+        if (!extension_loaded('gd')) {
+            return null;
+        }
+        
         $width = 400;
         $height = 300;
         $image = imagecreate($width, $height);
