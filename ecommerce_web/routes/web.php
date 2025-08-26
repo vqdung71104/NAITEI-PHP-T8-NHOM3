@@ -66,7 +66,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
         Route::put('/{order}', [OrderController::class, 'update'])->name('update');
         Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');
         Route::post('/{order}/status', [OrderController::class, 'updateStatus'])->name('update-status');
-
+        
     });
     
     // User management routes for admin
@@ -77,6 +77,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
         Route::put('/{user}', [AdminController::class, 'updateUser'])->name('update');
         Route::delete('/{user}', [AdminController::class, 'destroyUser'])->name('destroy');
     });
+
+    // Xác nhận đơn hàng
+    Route::post('/orders/{orderId}/confirm', [OrderController::class, 'confirmOrder'])->name('admin.orders.confirm');
 });
 
 
