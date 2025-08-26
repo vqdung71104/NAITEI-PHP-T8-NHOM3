@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\User;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -22,6 +23,7 @@ class AdminController extends Controller
             $categories = Category::all();
             $products = Product::with('category')->get();
             $orders = Order::with(['user', 'orderItems', 'orderItems.product'])->get();
+            $users = User::all();
             
             // Calculate statistics
             $totalOrders = $orders->count();
@@ -93,6 +95,7 @@ class AdminController extends Controller
                 'categories' => $categories,
                 'products' => $products,
                 'orders' => $orders,
+                'users' => $users,
                 'pagination' => $pagination,
                 'statistics' => $statistics,
             ]);
@@ -102,6 +105,7 @@ class AdminController extends Controller
                 'categories' => [],
                 'products' => [],
                 'orders' => [],
+                'users' => [],
                 'pagination' => [
                     'current_page' => 1,
                     'per_page' => 10,
@@ -328,6 +332,12 @@ class AdminController extends Controller
         $user->update($validated);
 
         return redirect()->back()->with('success', 'User updated successfully.');
+    }
+
+    public function showUser(User $user)
+    {
+        $user->load(['cartItems.product', 'Orders.orderItems.product', 'Addresses']);
+        return redirect()->back()->with('user', $user);
     }
 
     public function destroyUser(User $user)
