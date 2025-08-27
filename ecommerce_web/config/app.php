@@ -123,4 +123,10 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+
+    //'providers' => [
+    //    // ... các providers khác
+    //    App\Providers\BroadcastServiceProvider::class,
+    //],
+
 ];

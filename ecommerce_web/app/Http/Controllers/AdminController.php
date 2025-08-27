@@ -304,7 +304,6 @@ class AdminController extends Controller
     public function storeUser(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required|integer|exists:users,id',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
@@ -325,8 +324,9 @@ class AdminController extends Controller
             'status' => 'required|string|max:255'
         ]);
 
-        if (empty($validated['password'])) {
+        if (!isset($validated['password']) || $validated['password'] === '') {
             unset($validated['password']);
+            unset($validated['password_confirmation']);
         }
 
         $user->update($validated);

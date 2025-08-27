@@ -4,10 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Events\OrderCreated as OrderCreatedEvent;
 
 class Order extends Model
 {
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::created(function (Order $order) {
+            event(new OrderCreatedEvent($order));
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
