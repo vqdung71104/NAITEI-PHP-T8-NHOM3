@@ -98,8 +98,15 @@ class Product extends Model
     }
 
     /**
-     * Xóa ảnh khi xóa model
      */
+    private function deleteOldImage()
+    {
+        if ($this->image && Storage::disk('public')->exists($this->image)) {
+            Storage::disk('public')->delete($this->image);
+        }
+    }
+
+
     protected static function boot()
     {
         parent::boot();
