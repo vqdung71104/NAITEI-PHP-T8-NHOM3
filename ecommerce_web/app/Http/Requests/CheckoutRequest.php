@@ -11,33 +11,46 @@ class CheckoutRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
-    {
-        return [
-            'firstName'    => 'required|string|max:255',
-            'lastName'     => 'required|string|max:255',
-            'phone_number' => 'required|string|max:20',
-            'details'      => 'required|string|max:500',
-            'ward'         => 'required|string|max:100',
-            'district'     => 'required|string|max:100',
-            'city'         => 'required|string|max:100',
-            'postal_code'  => 'required|string|max:20',
-            'country'      => 'required|string|max:100',
-        ];
+    public function rules()
+{
+    $rules = [
+        'address_option' => 'required|in:existing,new',
+        'notes' => 'nullable|string',
+    ];
+
+    if ($this->address_option === 'existing') {
+        $rules['address_id'] = 'required|exists:addresses,id';
+    } else {
+        $rules = array_merge($rules, [
+            'full_name'    => 'required|string|max:255',
+            'phone_number' => ['required', 'regex:/^(?:\+84|0)\d{9,10}$/'],
+            'details'      => 'required|string|max:255',
+            'ward'         => 'required|string|max:255',
+            'district'     => 'required|string|max:255',
+            'city'         => 'required|string|max:255',
+            'postal_code'  => 'nullable|string|max:20',
+            'country'      => 'required|string|max:255',
+        ]);
     }
+
+    return $rules;
+}
+
 
     public function messages(): array
     {
         return [
-            'firstName.required' => 'Vui lòng nhập Họ.',
-            'lastName.required'  => 'Vui lòng nhập Tên.',
-            'phone_number.required' => 'Vui lòng nhập số điện thoại.',
-            'details.required'   => 'Vui lòng nhập địa chỉ chi tiết.',
-            'ward.required'      => 'Vui lòng nhập Phường/Xã.',
-            'district.required'  => 'Vui lòng nhập Quận/Huyện.',
-            'city.required'      => 'Vui lòng nhập Thành phố.',
-            'postal_code.required' => 'Vui lòng nhập mã bưu điện.',
-            'country.required'   => 'Vui lòng nhập Quốc gia.',
+            'address_option.required' => 'Vui lòng chọn loại địa chỉ.',
+            'address_id.required_if'  => 'Vui lòng chọn một địa chỉ đã lưu.',
+            'full_name.required_if'   => 'Vui lòng nhập họ và tên.',
+            'phone_number.required_if'=> 'Vui lòng nhập số điện thoại.',
+            'phone_number.regex'      => 'Số điện thoại không đúng định dạng (+84xxxxxxxxx hoặc 0xxxxxxxxx).',
+            'details.required_if'     => 'Vui lòng nhập địa chỉ chi tiết.',
+            'ward.required_if'        => 'Vui lòng nhập phường/xã.',
+            'district.required_if'    => 'Vui lòng nhập quận/huyện.',
+            'city.required_if'        => 'Vui lòng nhập tỉnh/thành phố.',
+            'country.required_if'     => 'Vui lòng nhập quốc gia.',
+            'payment_method.in'       => 'Phương thức thanh toán không hợp lệ.',
         ];
     }
 }

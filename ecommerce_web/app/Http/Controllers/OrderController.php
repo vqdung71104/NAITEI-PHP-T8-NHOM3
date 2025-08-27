@@ -267,17 +267,19 @@ class OrderController extends Controller
 
     // Backward compatibility method
     public function trackOrders()
-    {
-        $user = auth()->user();
-        
-        // Lấy đơn hàng của user hiện tại từ database
-        $orders = Order::with(['address', 'orderItems.product'])
-                      ->forUser($user->id)
-                      ->orderBy('created_at', 'desc')
-                      ->get();
-        
-        return view('orders.track', compact('orders'));
+{
+    $user = auth()->user();
+    if (!$user) {
+        return redirect()->route('login');
     }
+
+    $orders = Order::with(['address', 'orderItems.product'])
+                  ->forUser($user->id)
+                  ->orderBy('created_at', 'desc')
+                  ->get();
+
+    return view('orders.track', compact('orders'));
+}
 
     /**
      * Lấy đơn hàng với eager loading để tránh N+1 query
