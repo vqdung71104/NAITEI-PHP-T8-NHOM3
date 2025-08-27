@@ -81,69 +81,98 @@ class CartController extends Controller
     public function checkout()
     {
         $user = Auth::user();
+        $addresses = Auth::check()
+            ? $user->addresses()->orderByDesc('is_default')->latest()->get()
+            : collect();
+
         $cartItems = CartItem::with('product')->where('user_id', $user->id)->get();
         $subtotal = $cartItems->sum(fn($item) => ($item->product->price ?? 0) * $item->quantity);
         $shipping = 30000;
 
-        return view('cart.checkout', compact('cartItems', 'subtotal', 'shipping'));
+        return view('cart.checkout', compact('cartItems', 'subtotal', 'shipping', 'addresses'));
     }
 
     public function processCheckout(CheckoutRequest $request)
-    {
-        DB::transaction(function() use ($request) {
-            // 1. Tạo address
-            $fullName = $request->firstName . ' ' . $request->lastName;
-            $address = Address::create([
-                'user_id'      => Auth::id(),
-                'full_name'    => $fullName,
-                'phone_number' => $request->phone_number,
-                'details'      => $request->details,
-                'ward'         => $request->ward,
-                'district'     => $request->district,
-                'city'         => $request->city,
-                'postal_code'  => $request->postal_code,
-                'country'      => $request->country,
-                'is_default'   => 1,
-            ]);
-
-            // 2. Lấy giỏ hàng
-            $cartItems = CartItem::where('user_id', Auth::id())
-                ->with('product')
-                ->get();
-
-            if ($cartItems->isEmpty()) {
-                throw new \InvalidArgumentException('Giỏ hàng trống.');
-            }
-
-            // 3. Tạo order
-            $totalPrice = $cartItems->sum(fn($item) => $item->quantity * $item->product->price);
-
-            $order = Order::create([
-                'user_id'    => Auth::id(),
-                'address_id' => $address->id,
-                'total_price'=> $totalPrice,
-                'status'     => Order::STATUS_PENDING,
-            ]);
-
-            // 4. Tạo order items
-            foreach ($cartItems as $item) {
-                OrderItem::create([
-                    'order_id'   => $order->id,
-                    'product_id' => $item->product_id,
-                    'quantity'   => $item->quantity,
-                ]);
-            }
-
-            // 5. Xóa giỏ hàng
-            CartItem::where('user_id', Auth::id())->delete();
-
-            $product = $item->product;
-            if ($product->stock < $item->quantity) {
-                throw new \Exception("Sản phẩm {$product->name} không đủ số lượng trong kho.");
-            }
-            $product->decrement('stock', $item->quantity);
-        });
-
-        return redirect(route('home'))->with('success', 'Đặt hàng thành công! Chúng tôi sẽ liên hệ bạn trong vòng 48h để xác nhận đơn hàng.');
+{
+    $user = auth()->user();
+    if (!$user) {
+        return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để thanh toán.');
     }
+
+    $cartItems = CartItem::with('product')->where('user_id', $user->id)->get();
+    if ($cartItems->isEmpty()) {
+        return redirect()->back()->with('error', 'Giỏ hàng của bạn đang trống.');
+    }
+
+    \DB::beginTransaction();
+    try {
+        // Xử lý địa chỉ
+        if ($request->address_option === 'existing') {
+            $address = Address::where('id', $request->address_id)
+                        ->where('user_id', $user->id)
+                        ->firstOrFail();
+        } else {
+            // bỏ default của địa chỉ cũ
+            Address::where('user_id', $user->id)->update(['is_default' => 0]);
+
+            $address = Address::create([
+                'user_id' => $user->id,
+                'full_name' => $request->full_name,
+                'phone_number' => $request->phone_number,
+                'details' => $request->details,
+                'ward' => $request->ward,
+                'district' => $request->district,
+                'city' => $request->city,
+                'postal_code' => $request->postal_code,
+                'country' => $request->country,
+                'is_default' => 1,
+            ]);
+        }
+
+        // Tính tổng
+        $subtotal = $cartItems->sum(fn($item) => ($item->product->price ?? 0) * $item->quantity);
+        $shipping = 30000;
+        $totalPrice = $subtotal + $shipping;
+
+        // Tạo order
+        $order = Order::create([
+            'user_id' => $user->id,
+            'address_id' => $address->id,
+            'total_price' => $totalPrice,
+            'payment_method' => 'COD',
+            'status' => 'pending',
+            'notes' => $request->notes,
+        ]);
+
+        // Tạo order items và giảm stock
+        foreach ($cartItems as $item) {
+            $product = $item->product;
+            if ($product && $product->stock !== null) {
+                if ($product->stock < $item->quantity) {
+                    throw new \Exception("Sản phẩm {$product->name} không đủ số lượng.");
+                }
+                $product->decrement('stock', $item->quantity);
+            }
+
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'price' => $product->price ?? 0,
+            ]);
+        }
+
+        // Xóa giỏ hàng
+        CartItem::where('user_id', $user->id)->delete();
+
+        \DB::commit();
+
+        return redirect()->route('orders.track')
+                         ->with('success', 'Đặt hàng thành công!');
+    } catch (\Throwable $e) {
+        \DB::rollBack();
+        return redirect()->back()->with('error', 'Có lỗi khi xử lý đơn hàng: ' . $e->getMessage());
+    }
+}
+
 }

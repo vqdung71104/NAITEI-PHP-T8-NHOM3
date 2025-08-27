@@ -24,13 +24,20 @@ Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{cartItem}', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{cartItem}', [CartController::class, 'remove'])->name('cart.remove');
 
+// Trang checkout (hiển thị form)
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
-Route::post('/checkout', [CartController::class, 'processCheckout'])->name('checkout.process');
 
-// Legacy web routes for backward compatibility
+// Xử lý đặt hàng (submit form)
+Route::post('/checkout/process', [CartController::class, 'processCheckout'])->name('checkout.process');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/orders/track', [OrderController::class, 'trackOrders'])->name('orders.track');
 });
+
+// Trang chi tiết đơn hàng sau khi đặt thành công
+Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -96,6 +103,7 @@ Route::get('/dashboard', function () {
 
 Route::post('/lang',  [LanguageController::class, 'changeLanguage'])->name('lang.set');
 Route::get('/language/{language}', [LanguageController::class, 'changeLanguageBlade'])->name('language.change'); 
+
 
 
 require __DIR__.'/settings.php';
