@@ -12,6 +12,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ShippingController;
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'viewall'])->name('products.viewall');
@@ -23,6 +24,9 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{cartItem}', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{cartItem}', [CartController::class, 'remove'])->name('cart.remove');
+
+//tính shipping
+Route::post('/shipping/calculate', [ShippingController::class, 'calculate'])->name('shipping.calculate');
 
 // Trang checkout (hiển thị form)
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');

@@ -267,18 +267,18 @@ class OrderController extends Controller
 
     // Backward compatibility method
     public function trackOrders()
-{
-    $user = auth()->user();
-    if (!$user) {
-        return redirect()->route('login');
-    }
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
 
-    $orders = Order::with(['address', 'orderItems.product'])
-                  ->forUser($user->id)
-                  ->orderBy('created_at', 'desc')
-                  ->get();
+        $orders = Order::with(['address', 'orderItems.product'])
+                    ->forUser($user->id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
 
-    return view('orders.track', compact('orders'));
+        return view('orders.track', compact('orders'));
 }
 
     /**
