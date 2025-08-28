@@ -428,3 +428,49 @@ select {
 ::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
 }
+
+/* CSS cho button variant outline tối giản sang trọng */
+#confirmAddressBtn {
+    /* Layout & Size */
+    padding: 12px 24px;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    min-width: 160px;
+    height: 44px;
+    
+    /* Typography */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    
+    /* Colors */
+    background-color: transparent;
+    color: #2d3748;
+    
+    /* Effects */
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    
+    /* Remove default button styles */
+    outline: none;
+    margin-bottom: 2rem;
+}
+
+/* Hover effect */
+#confirmAddressBtn:hover {
+    background-color: #71747a;
+    border-color: #cbd5e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+    
+}
+
+/* Active/Click effect */
+#confirmAddressBtn:active {
+    background-color: #edf2f7;
+    border-color: #a0aec0;
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
