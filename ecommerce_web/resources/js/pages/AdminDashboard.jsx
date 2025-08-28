@@ -29,6 +29,27 @@ export default function AdminDashboard({
   const [processing, setProcessing] = useState({});
   const [alert, setAlert] = useState(null);
 
+  const { t, i18n } = useTranslation();
+  const { props } = usePage();
+  const { locale, _token } = props;
+  
+  async function changeLang(lang) {
+    // 1) Đổi ngay trên frontend
+    i18n.changeLanguage(lang);
+  
+    // 2) Gọi API để lưu vào session backend
+    await fetch('/lang', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': _token ?? '',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ lang }),
+      credentials: 'same-origin',
+    });
+  }
+
   const handleConfirmOrder = (orderId) => {
     setProcessing(prev => ({ ...prev, [orderId]: true }));
     
@@ -67,7 +88,16 @@ export default function AdminDashboard({
   return (
     <AdminLayout breadcrumbs={breadcrumbs}>
       <Head title="Admin Dashboard" />
-
+      <div className="mb-4 flex justify-end">
+        <select 
+          value={i18n.language} 
+          onChange={(e) => changeLang(e.target.value)}
+          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+        >
+          <option value="vi">Tiếng Việt</option>
+          <option value="en">English</option>
+        </select>
+      </div>
       {/* Alert thông báo */}
       {alert && (
         <div className="fixed top-4 right-4 z-50 max-w-md mb-4">
