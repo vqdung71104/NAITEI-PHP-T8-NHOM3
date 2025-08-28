@@ -324,7 +324,7 @@ class AdminController extends Controller
             'status' => 'required|string|max:255'
         ]);
 
-        if (empty($validated['password'])) {
+        if (!isset($validated['password']) || $validated['password'] === '') {
             unset($validated['password']);
             unset($validated['password_confirmation']);
         }
