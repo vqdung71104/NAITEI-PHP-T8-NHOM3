@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Inertia\Inertia;
+use App\Notifications\NewOrderNotification;
 
 class OrderController extends Controller
 {
@@ -102,6 +103,11 @@ class OrderController extends Controller
             }
             
             $order->update(['total_price' => $totalPrice]);
+
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewOrderNotification($order));
+            }
             
             DB::commit();
             
