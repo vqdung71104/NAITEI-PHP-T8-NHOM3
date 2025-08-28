@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Review;
 use App\Http\Controllers\ProductController;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
@@ -16,7 +16,7 @@ use Mockery;
 
 class ProductCrudUnitTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     protected $productController;
     protected $category;
