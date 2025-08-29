@@ -265,74 +265,177 @@
     "You're logged in!": "Bạn đã đăng nhập!",
     "Your email address is unverified.": "Địa chỉ email của bạn chưa được xác minh.",
   "admin": {
-    "title": "Bảng Điều Khiển Admin",
-    "tabs": {
-      "dashboard": "Tổng Quan",
-      "categories": "Danh Mục",
-      "products": "Sản Phẩm",
-      "orders": "Đơn Hàng"
-    },
-    "dashboard": {
-      "salesOverview": "Tổng Quan Doanh Thu",
-      "productPerformance": "Hiệu Suất Sản Phẩm",
-      "salesChartPlaceholder": "Biểu Đồ Doanh Thu - Sẽ được triển khai sau",
-      "productChartPlaceholder": "Biểu Đồ Sản Phẩm - Sẽ được triển khai sau"
-    },
-    "categories": {
-      "title": "Quản Lý Danh Mục",
-      "namePlaceholder": "Tên danh mục",
-      "descriptionPlaceholder": "Mô tả (tùy chọn)",
-      "addButton": "Thêm Danh Mục",
-      "updateButton": "Cập Nhật Danh Mục"
-    },
-    "products": {
-      "title": "Quản Lý Sản Phẩm",
-      "namePlaceholder": "Tên sản phẩm",
-      "pricePlaceholder": "Giá",
-      "descriptionPlaceholder": "Mô tả",
-      "stockPlaceholder": "Số lượng tồn kho",
-      "imagePlaceholder": "URL hình ảnh (tùy chọn)",
-      "selectCategory": "Chọn danh mục",
-      "addButton": "Thêm Sản Phẩm",
-      "updateButton": "Cập Nhật Sản Phẩm",
-      "price": "Giá",
-      "stock": "Tồn Kho",
-      "category": "Danh Mục",
-      "image": "Hình Ảnh",
-      "noImage": "Không có hình ảnh"
-    },
-    "orders": {
-      "title": "Quản Lý Đơn Hàng",
-      "orderId": "Mã Đơn Hàng",
-      "customer": "Khách Hàng",
-      "date": "Ngày",
-      "total": "Tổng Tiền",
-      "status_": "Trạng Thái",
-      "access": "Xác nhận",
-      "view": "Xem",
-      "guest": "Khách",
-      "status": {
-        "pending": "Đang Chờ",
-        "processing": "Đang Xử Lý",
-        "completed": "Hoàn Thành",
-        "cancelled": "Đã Hủy",
-        "return": "Trả Hàng"
+      "page_title": "Bảng Điều Khiển Quản Trị",
+      "order_confirmed_success": "Đơn hàng #{orderId} đã được xác nhận thành công!",
+      "order_confirm_error": "Có lỗi xảy ra khi xác nhận đơn hàng!",
+      "tabs": {
+        "dashboard": "Tổng Quan",
+        "categories": "Danh Mục",
+        "products": "Sản Phẩm", 
+        "orders": "Đơn Hàng",
+        "users": "Người Dùng"
+      },
+      "dashboard": {
+        "title": "Tổng Quan Bảng Điều Khiển",
+        "total_orders": "Tổng số đơn hàng",
+        "recent_orders": "đơn trong 7 ngày qua",
+        "total_revenue": "Tổng doanh thu",
+        "total_products": "Tổng sản phẩm",
+        "low_stock_products": "sản phẩm sắp hết hàng",
+        "categories": "Danh mục",
+        "pending": "Đang chờ",
+        "processing": "Đang xử lý",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã hủy",
+        "returns": "Trả hàng",
+        "order_status_stats": "Thống kê đơn hàng theo trạng thái",
+        "top_categories": "Top danh mục bán chạy",
+        "monthly_revenue": "Doanh thu 12 tháng gần đây",
+        "revenue": "Doanh thu",
+        "products_per_category": "Sản phẩm theo danh mục",
+        "order_status": "Trạng thái đơn hàng",
+        "product_count": "Số lượng sản phẩm"
+      },
+      "users": {
+        "title": "Quản Lý Người Dùng",
+        "name_placeholder": "Tên người dùng",
+        "email_placeholder": "Email người dùng",
+        "password_placeholder": "Mật khẩu người dùng",
+        "confirm_password_placeholder": "Xác nhận mật khẩu",
+        "role": {
+          "admin": "Quản trị viên",
+          "customer": "Khách hàng"
+        },
+        "status": {
+          "active": "Hoạt động",
+          "inactive": "Không hoạt động"
+        },
+        "add_user": "Thêm Người Dùng",
+        "update_user": "Cập Nhật Người Dùng",
+        "cancel": "Hủy",
+        "edit": "Sửa",
+        "delete": "Xóa",
+        "confirm_deletion": "Xác Nhận Xóa",
+        "confirm_delete_message": "Bạn có chắc chắn muốn xóa người dùng này?",
+        "success": "Thành công!",
+        "error": "Lỗi!",
+        "user_created": "Người dùng được tạo thành công",
+        "user_updated": "Người dùng được cập nhật thành công",
+        "user_deleted": "Người dùng được xóa thành công",
+        "create_user_error": "Không thể tạo người dùng",
+        "update_user_error": "Không thể cập nhật người dùng",
+        "delete_user_error": "Không thể xóa người dùng",
+        "passwords_not_match": "Mật khẩu không khớp",
+        "validation_error": "Lỗi:",
+        "table": {
+          "id": "ID",
+          "name": "Tên",
+          "email": "Email",
+          "role": "Vai trò",
+          "status": "Trạng thái",
+          "actions": "Hành động"
+        },
+        "pagination": {
+          "previous": "Trước",
+          "next": "Tiếp",
+          "page": "Trang",
+          "of": "của"
+        }
+      },
+      "products": {
+        "title": "Quản Lý Sản Phẩm",
+        "name_placeholder": "Tên sản phẩm",
+        "price_placeholder": "Giá",
+        "author_placeholder": "Tác giả",
+        "description_placeholder": "Mô tả",
+        "stock_placeholder": "Số lượng tồn kho",
+        "category_select": "Chọn danh mục",
+        "image_url_placeholder": "URL hình ảnh (tùy chọn)",
+        "add_product": "Thêm Sản Phẩm",
+        "update_product": "Cập Nhật Sản Phẩm",
+        "cancel": "Hủy",
+        "edit": "Sửa",
+        "delete": "Xóa",
+        "confirm_delete_message": "Bạn có chắc chắn muốn xóa sản phẩm này?",
+        "success": "Thành công!",
+        "error": "Lỗi!",
+        "product_created": "Sản phẩm được tạo thành công",
+        "product_updated": "Sản phẩm được cập nhật thành công",
+        "product_deleted": "Sản phẩm được xóa thành công",
+        "delete_product_error": "Không thể xóa sản phẩm",
+        "validation_error": "Lỗi:",
+        "no_image": "Không có hình ảnh",
+        "table": {
+          "id": "ID",
+          "name": "Tên",
+          "author": "Tác giả",
+          "price": "Giá",
+          "stock": "Tồn kho",
+          "category": "Danh mục",
+          "image": "Hình ảnh",
+          "actions": "Hành động"
+        },
+        "pagination": {
+          "previous": "Trước",
+          "next": "Tiếp",
+          "page": "Trang",
+          "of": "của"
+        }
+      },
+      "orders": {
+        "title": "Quản Lý Đơn Hàng",
+        "all_status": "Tất cả trạng thái",
+        "status": {
+          "pending": "Đang chờ",
+          "processing": "Đang xử lý",
+          "completed": "Hoàn thành",
+          "cancelled": "Đã hủy",
+          "return": "Trả hàng"
+        },
+        "date_to": "đến",
+        "clear_filters": "Xóa bộ lọc",
+        "find": "Tìm kiếm",
+        "change_status": "Đổi trạng thái",
+        "view_order": "Xem đơn hàng",
+        "save": "Lưu",
+        "saving": "Đang lưu...",
+        "cancel": "Hủy",
+        "success": "Thành công!",
+        "error": "Lỗi!",
+        "order_updated": "Trạng thái đơn hàng được cập nhật thành công",
+        "order_update_error": "Không thể cập nhật trạng thái đơn hàng",
+        "table": {
+          "order_id": "Mã đơn hàng",
+          "customer": "Khách hàng",
+          "total": "Tổng cộng",
+          "order_date": "Ngày đặt hàng",
+          "status": "Trạng thái",
+          "actions": "Hành động"
+        },
+        "pagination": {
+          "previous": "Trước",
+          "next": "Tiếp",
+          "page": "Trang",
+          "of": "của"
+        },
+        "modal": {
+          "title": "Chi tiết đơn hàng - ID: {orderId}",
+          "customer_info": "Thông tin khách hàng",
+          "name": "Tên",
+          "email": "Email",
+          "shipping_address": "Địa chỉ giao hàng",
+          "order_items": "Sản phẩm đặt hàng",
+          "quantity": "Số lượng",
+          "price": "Giá",
+          "order_summary": "Tóm tắt đơn hàng",
+          "total_price": "Tổng giá",
+          "status": "Trạng thái",
+          "order_date": "Ngày đặt hàng",
+          "close": "Đóng",
+          "guest": "Khách",
+          "na": "N/A",
+          "unknown_product": "Sản phẩm không xác định"
+        }
       }
-    },
-    "common": {
-      "id": "ID",
-      "name": "Tên",
-      "description": "Mô Tả",
-      "actions": "Thao Tác",
-      "edit": "Sửa",
-      "delete": "Xóa",
-      "cancel": "Hủy",
-      "previous": "Trước",
-      "next": "Tiếp",
-      "pageInfo": "Trang {{current}} của {{total}}"
-    },
-    "confirmDeleteCategory": "Bạn có chắc chắn muốn xóa danh mục này không?",
-    "confirmDeleteProduct": "Bạn có chắc chắn muốn xóa sản phẩm này không?"
-  }
-
+    }
 }

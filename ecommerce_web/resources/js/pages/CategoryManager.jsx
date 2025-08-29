@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useForm } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 
 export default function CategoryManager({ categories }) {
+  const { t } = useTranslation();
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   
